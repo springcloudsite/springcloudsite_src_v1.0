@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- ============================================================== -->
+<!-- ================可直接使用Base配置文件中定义的节点！================ -->
+<!-- ============================================================== -->
+<mapper namespace="com.scs.di.dao.ScsObjectDao">
+	<!-- 请在下方添加自定义配置 -->
+
+	<!-- 列表对象 -->
+	<resultMap id="TableResultMap" type="com.scs.di.vo.TableObjectVO">
+		<id column="id" property="id" />
+		<result column="businessid" property="businessid" />
+		<result column="name" property="name" />
+		<result column="typeid" property="typeid" />
+		<result column="objectType" property="objectType" />
+		<result column="description" property="description" />
+		<result column="founder" property="founder" />
+	</resultMap>
+	<!-- 根据对象条件查询分析对象数据 -->
+	<select id="selectPageBySearchObject" resultMap="TableResultMap"
+		parameterType="com.scs.di.vo.SearchObject">
+		SELECT
+		a.id, a.businessid, a.name, a.typeid, a.description, a.founder,
+		b.name AS objectType
+		FROM scs_object a LEFT JOIN scs_object_type b
+		ON a.typeid = b.id
+		<where>
+			<if test="name != null and name != ''">
+				AND a.name = #{name}
+			</if>
+			<if test="nameLike != null and nameLike != ''">
+				AND a.name LIKE CONCAT('%',#{nameLike},'%')
+			</if>
+			<if test="objectType != null and objectType != ''">
+				AND b.name = #{objectType}
+			</if>
+			<if test="objectTypeLike != null and objectTypeLike != ''">
+				AND b.name LIKE CONCAT('%',#{objectTypeLike},'%')
+			</if>
+		</where>
+	</select>
+	<!-- 根据对象条件查询分析对象数据 -->
+	<select id="selectBySearchObject" resultMap="TableResultMap"
+		parameterType="com.scs.di.vo.SearchObject">
+		SELECT
+		a.id, a.businessid, a.name, a.typeid, a.description, a.founder,
+		b.name AS objectType
+		FROM scs_object a LEFT JOIN scs_object_type b
+		ON a.typeid = b.id
+		<where>
+			<if test="name != null and name != ''">
+				AND a.name = #{name}
+			</if>
+			<if test="nameLike != null and nameLike != ''">
+				AND a.name LIKE CONCAT('%',#{nameLike},'%')
+			</if>
+			<if test="objectType != null and objectType != ''">
+				AND b.name = #{objectType}
+			</if>
+			<if test="objectTypeLike != null and objectTypeLike != ''">
+				AND b.name LIKE CONCAT('%',#{objectTypeLike},'%')
+			</if>
+		</where>
+	</select>
+	<!-- 根据业务主键查询分析对象数据 -->
+	<select id="selectByBusinessId" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM scs_object
+		<where>
+			businessid = #{businessid}
+		</where>
+	</select>
+</mapper>

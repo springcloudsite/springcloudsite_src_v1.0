@@ -1,0 +1,107 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:1110/eureka/
+  instance:
+    preferIpAddress: true
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+    #注册服务默认心跳时间,默认是30秒，也就是每30秒会向Eureka Server发起Renew操作。
+    leaseRenewalIntervalInSeconds: 10
+    #服务失效时间。默认是90秒，也就是如果Eureka Server在90秒内没有接收到来自ServiceProvider的Renew操作，就会把Service Provider剔除。
+    leaseExpirationDurationInSeconds: 20
+    
+server:
+  port: 8769
+  
+jwt:
+  header: www-Authorization
+  secret: goldwindtgcw
+  tokenHead: "Bearer "
+  access_token: 
+    expiration: 604800
+  refresh_token: 
+    expiration: 28800
+    
+spring:
+  application:
+    name: zuul-server
+    encoding:
+      force: true
+      charset: UTF-8
+      enabled: true
+
+zuul:
+#   ignored-services: "*"
+  routes:
+    scs-service-scsdi: /api/scs-service-scsdi/**
+    scs-service-system: /api/scs-service-system/**
+    scs-service-usermanagement: /api/scs-service-usermanagement/**
+    scs-service-filemanagement: /api/scs-service-filemanagement/**
+    scs-service-messagecenter: /api/scs-service-messagecenter/**
+    scs-service-portal: /api/scs-service-portal/**
+  max:
+    host:
+      maxPerRouteConnections: 200
+      maxTotalConnections: 2000
+  host:
+    socketTimeoutMillis: 60000 #如果是url的方式，则zuul.host开头的生效
+    connectTimeoutMillis: 60000 #如果是url的方式，则zuul.host开头的生效
+
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: true
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000 #如果配置了熔断，超时走熔断
+            ribbon:
+              ReadTimeout: 60000 #如果路由方式是serviceId的方式，那么ribbon的生效
+              ConnectTimeout: 30000 #如果路由方式是serviceId的方式，那么ribbon的生效
+
+ribbon:
+  ReadTimeout: 60000 #如果路由方式是serviceId的方式，那么ribbon的生效
+  ConnectTimeout: 30000 #如果路由方式是serviceId的方式，那么ribbon的生效
+  MaxAutoRetries: 0
+  MxAutoRetriesNextServer: 1
+      
+# battcn:
+#   security:
+#     token:
+#       expiration-time: 10 # 分钟 1440
+#       refresh-exp-time: 30 # 分钟 2880
+#       issuer: http://cloud.acca.com.cn
+#       signing-key: ARAF
+      
+#隔离策略，默认是Thread, 可选THREAD｜SEMAPHORE
+# hystrix.command.default.execution.isolation.strategy: SEMAPHORE
+# hystrix.command.default.execution.isolation.semaphore.timeoutInMilliseconds: 30000
+# hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 50000
+#如果并发数达到该设置值，请求会被拒绝和抛出异常并且fallback不会被调用。默认10
+#应用于Hystrix的THREAD和SEMAPHORE策略
+# hystrix.command.default.fallback.isolation.semaphore.maxConcurrentRequests: 10
+# #强制打开熔断器，如果打开这个开关，那么拒绝所有request
+# hystrix.command.default.circuitBreaker.forceOpen: false
+  
+#监控相关  
+management: 
+  security: 
+    enabled: false
+  health:  
+    mail:  
+      enabled: false
+endpoints:
+  restart:
+    enabled: true
+  shutdown:
+    enabled: true
+  health:
+    sensitive: false
+    
+# security:
+#   path:
+#     permit: /**/*.js, /**/*.css, /**
+#     auth: /**/*.jsp
+
+    

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- ============================================================== -->
+<!-- ================可直接使用Base配置文件中定义的节点！================ -->
+<!-- ============================================================== -->
+<mapper namespace="com.scs.usermanagement.dao.SysUserDao">
+	<!-- 请在下方添加自定义配置 -->
+	<!-- 用户与角色关系列表对象 -->
+	<resultMap id="userRoleResultMap" type="com.scs.usermanagement.vo.UserRoleVO">
+		<id column="id" property="id" />
+		<result column="userId" property="userId" />
+		<result column="roleId" property="roleId" />
+		<result column="login_name" property="loginName" />
+		<result column="nickname" property="nickname" />
+		<result column="is_disable" property="isDisable" />
+	</resultMap>
+
+	<!-- 根据登录名称查询用户对象数据 -->
+	<select id="selectByLoginName" resultMap="BaseResultMap"
+		parameterType="string">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM sys_user
+		<where>
+			login_name = #{loginName}
+			<if test="isDelete != null and isDelete != ''">
+				AND is_delete = #{isDelete}
+			</if>
+		</where>
+	</select>
+	<!-- 根据用户查询条件查询用户对象数据 -->
+	<select id="selectPageBySearchUser" resultMap="BaseResultMap"
+		parameterType="com.scs.usermanagement.vo.SearchUser">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM sys_user
+		<where>
+			<if test="loginName != null and loginName != ''">
+				AND login_name = #{loginName}
+			</if>
+			<if test="loginNameLike != null and loginNameLike != ''">
+				AND login_name LIKE CONCAT('%',#{loginNameLike},'%')
+			</if>
+			<if test="nickname != null and nickname != ''">
+				AND nickname = #{nickname}
+			</if>
+			<if test="nicknameLike != null and nicknameLike != ''">
+				AND nickname LIKE CONCAT('%',#{nicknameLike},'%')
+			</if>
+			<if test="isDisable != null and isDisable != ''">
+				and is_disable = #{isDisable}
+			</if>
+			<if test="isDelete != null and isDelete != ''">
+				AND is_delete = #{isDelete}
+			</if>
+		</where>
+	</select>
+	<!-- 根据用户与角色关系条件查询用户对象数据 -->
+	<select id="selectPageUserRoleBySearchUserRole" resultMap="userRoleResultMap"
+		parameterType="com.scs.usermanagement.vo.SearchUserRole">
+		SELECT
+		b.id, a.id userId, b.role_id roleId, login_name, nickname,
+		is_disable
+		FROM sys_user a LEFT JOIN
+		(
+		SELECT * FROM
+		sys_user_role_relationship
+		<where>
+			<if test="roleId != null and roleId != ''">
+				AND role_id = #{roleId}
+			</if>
+		</where>
+		) b ON
+		a.id = b.user_id
+		<where>
+			<if test="loginName != null and loginName != ''">
+				AND a.login_name = #{loginName}
+			</if>
+			<if test="loginNameLike != null and loginNameLike != ''">
+				AND a.login_name LIKE CONCAT('%',#{loginNameLike},'%')
+			</if>
+			<if test="nickname != null and nickname != ''">
+				AND a.nickname = #{nickname}
+			</if>
+			<if test="nicknameLike != null and nicknameLike != ''">
+				AND a.nickname LIKE CONCAT('%',#{nicknameLike},'%')
+			</if>
+			<if test="isDisable != null and isDisable != ''">
+				and a.is_disable = #{isDisable}
+			</if>
+			<if test="isDelete != null and isDelete != ''">
+				AND is_delete = #{isDelete}
+			</if>
+		</where>
+	</select>
+</mapper>

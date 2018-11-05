@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- ============================================================== -->
+<!-- ================可直接使用Base配置文件中定义的节点！================ -->
+<!-- ============================================================== -->
+<mapper namespace="com.scs.di.dao.ScsObjectTypeDao">
+	<!-- 请在下方添加自定义配置 -->
+
+	<!-- 根据对象类型条件查询分析对象类型数据 -->
+	<select id="selectPageBySearchObjectType" resultMap="BaseResultMap"
+		parameterType="com.scs.di.vo.SearchObjectType">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM scs_object_type
+		<where>
+			<if test="name != null and name != ''">
+				AND name = #{name}
+			</if>
+			<if test="nameLike != null and nameLike != ''">
+				AND name LIKE CONCAT('%',#{nameLike},'%')
+			</if>
+		</where>
+	</select>
+	<!-- 根据对象类型条件查询分析对象类型数据 -->
+	<select id="selectBySearchObjectType" resultMap="BaseResultMap"
+		parameterType="com.scs.di.vo.SearchObjectType">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM scs_object_type
+		<where>
+			<if test="name != null and name != ''">
+				AND name = #{name}
+			</if>
+			<if test="nameLike != null and nameLike != ''">
+				AND name LIKE CONCAT('%',#{nameLike},'%')
+			</if>
+		</where>
+	</select>
+</mapper>

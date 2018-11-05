@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- ============================================================== -->
+<!-- ================可直接使用Base配置文件中定义的节点！================ -->
+<!-- ============================================================== -->
+<mapper namespace="com.scs.usermanagement.dao.SysRoleDao">
+	<!-- 请在下方添加自定义配置 -->
+
+	<!-- 根据角色编码查询角色对象数据 -->
+	<select id="selectByRoleCode" resultMap="BaseResultMap"
+		parameterType="string">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM sys_role
+		<where>
+			role_code = #{roleCode}
+			<if test="isDelete != null and isDelete != ''">
+				AND is_delete = #{isDelete}
+			</if>
+		</where>
+	</select>
+	<!-- 根据登录名称查询角色对象数据 -->
+	<select id="selectPageBySearchRole" resultMap="BaseResultMap"
+		parameterType="com.scs.usermanagement.vo.SearchRole">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM sys_role
+		<where>
+			<if test="roleCode != null and roleCode != ''">
+				AND role_code = #{roleCode}
+			</if>
+			<if test="roleCodeLike != null and roleCodeLike != ''">
+				AND role_code LIKE CONCAT('%',#{roleCodeLike},'%')
+			</if>
+			<if test="roleName != null and roleName != ''">
+				AND role_name = #{roleName}
+			</if>
+			<if test="roleNameLike != null and roleNameLike != ''">
+				AND role_name LIKE CONCAT('%',#{roleNameLike},'%')
+			</if>
+			<if test="isDisable != null and isDisable != ''">
+				and is_disable = #{isDisable}
+			</if>
+			<if test="isDelete != null and isDelete != ''">
+				AND is_delete = #{isDelete}
+			</if>
+		</where>
+	</select>
+
+	<!-- 根据用户组件查询其关联的角色编码 -->
+	<select id="selectRoleCodesByUserId" resultType="java.lang.String"
+		parameterType="java.lang.Integer">
+		SELECT a.role_code
+		FROM sys_user_role_relationship b LEFT JOIN
+		sys_role
+		a ON a.id = b.role_id
+		<where>
+			b.user_id = #{userId}
+		</where>
+	</select>
+</mapper>

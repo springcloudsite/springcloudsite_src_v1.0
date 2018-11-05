@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- ============================================================== -->
+<!-- ============================================================== -->
+<!-- =======通过SCS工具自动生成，请勿手工修改！======= -->
+<!-- =======本配置文件中定义的节点可在自定义配置文件中直接使用！       ======= -->
+<!-- ============================================================== -->
+<!-- ============================================================== -->
+<mapper namespace="com.scs.usermanagement.dao.SysRoleDao">
+	<!-- 默认开启二级缓存,使用Least Recently Used（LRU，最近最少使用的）算法来收回 -->
+	<!-- <cache/> -->
+	<!-- 通用查询结果对象-->
+	<resultMap id="BaseResultMap" type="com.scs.usermanagement.domainmodel.SysRole">
+		 <id column="id" property="id"/> 
+		 <result column="role_code" property="roleCode"/> 
+		 <result column="role_name" property="roleName"/> 
+		 <result column="role_description" property="roleDescription"/> 
+		 <result column="is_disable" property="isDisable"/> 
+		 <result column="is_delete" property="isDelete"/> 
+		 <result column="created_by" property="createdBy"/> 
+		 <result column="created_date" property="createdDate"/> 
+		 <result column="last_modified_by" property="lastModifiedBy"/> 
+		 <result column="last_modified_date" property="lastModifiedDate"/> 
+	</resultMap>
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		 id, role_code, role_name, role_description, is_disable,
+		 is_delete, created_by, created_date, last_modified_by, last_modified_date
+		
+	</sql>
+
+	<!-- 按对象查询记录的WHERE部分 -->
+	<sql id="Base_Select_By_Entity_Where">
+		<if test="id != null and id != ''">
+			and id = #{id}
+		</if>
+		<if test="roleCode != null and roleCode != ''">
+			and role_code = #{roleCode}
+		</if>
+		<if test="roleName != null and roleName != ''">
+			and role_name = #{roleName}
+		</if>
+		<if test="roleDescription != null and roleDescription != ''">
+			and role_description = #{roleDescription}
+		</if>
+		<if test="isDisable != null and isDisable != ''">
+			and is_disable = #{isDisable}
+		</if>
+		<if test="isDelete != null and isDelete != ''">
+			and is_delete = #{isDelete}
+		</if>
+		<if test="createdBy != null and createdBy != ''">
+			and created_by = #{createdBy}
+		</if>
+		<if test="createdDate != null and createdDate != ''">
+			and created_date = #{createdDate}
+		</if>
+		<if test="lastModifiedBy != null and lastModifiedBy != ''">
+			and last_modified_by = #{lastModifiedBy}
+		</if>
+		<if test="lastModifiedDate != null and lastModifiedDate != ''">
+			and last_modified_date = #{lastModifiedDate}
+		</if>
+	</sql>
+
+	<!-- 按对象查询记录的SQL部分 -->
+	<sql id="Base_Select_By_Entity">
+		select
+			<include refid="Base_Column_List" />
+		from sys_role
+		<where>
+			<include refid="Base_Select_By_Entity_Where" />
+		</where>
+	</sql>
+
+	<!-- 按主键查询一条记录 -->
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="map">
+		select
+			<include refid="Base_Column_List" />
+		from sys_role
+		where id = #{param1}
+	</select>
+
+	<!-- 按主键List查询多条记录 -->
+	<select id="selectBatchByPrimaryKeys" resultMap="BaseResultMap" parameterType="map">
+		select
+			<include refid="Base_Column_List" />
+		from sys_role
+		where id in
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+
+	<!-- 按对象查询一页记录（多条记录） -->
+	<select id="selectPage" resultMap="BaseResultMap" parameterType="com.scs.usermanagement.domainmodel.SysRole">
+		<include refid="Base_Select_By_Entity" />
+	</select>
+
+	<!-- 按对象查询一页记录（多条记录） -->
+	<select id="selectAll" resultMap="BaseResultMap" parameterType="com.scs.usermanagement.domainmodel.SysRole">
+		<include refid="Base_Select_By_Entity" />
+	</select>
+
+	<!-- 按主键删除一条记录 -->
+	<delete id="deleteByPrimaryKey" parameterType="map">
+		delete from sys_role
+		where id = #{param1}
+	</delete>
+
+	<!-- 按主键List删除多条记录 -->
+	<delete id="deleteBatchByPrimaryKeys" parameterType="map">
+		delete from sys_role
+		where id in 
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+	<!-- 完整插入一条记录-->
+	<insert id="insert" parameterType="com.scs.usermanagement.domainmodel.SysRole" useGeneratedKeys="true" keyProperty="id">
+		insert into sys_role (role_code, role_name, role_description, is_disable, 
+			is_delete, created_by, created_date, last_modified_by, last_modified_date
+			)
+		values(#{roleCode}, #{roleName}, #{roleDescription}, #{isDisable}, 
+			#{isDelete}, #{createdBy}, #{createdDate}, #{lastModifiedBy}, #{lastModifiedDate}
+			)
+	</insert>
+
+	<!-- 插入一条记录(为空的字段不操作) -->
+	<insert id="insertSelective" parameterType="com.scs.usermanagement.domainmodel.SysRole" useGeneratedKeys="true" keyProperty="id">
+		insert into sys_role
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="roleCode != null" >
+				role_code,
+			</if>
+			<if test="roleName != null" >
+				role_name,
+			</if>
+			<if test="roleDescription != null" >
+				role_description,
+			</if>
+			<if test="isDisable != null" >
+				is_disable,
+			</if>
+			<if test="isDelete != null" >
+				is_delete,
+			</if>
+			<if test="createdBy != null" >
+				created_by,
+			</if>
+			<if test="createdDate != null" >
+				created_date,
+			</if>
+			<if test="lastModifiedBy != null" >
+				last_modified_by,
+			</if>
+			<if test="lastModifiedDate != null" >
+				last_modified_date,
+			</if>
+		</trim>
+		values <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="roleCode != null" >
+				#{roleCode},
+			</if>
+			<if test="roleName != null" >
+				#{roleName},
+			</if>
+			<if test="roleDescription != null" >
+				#{roleDescription},
+			</if>
+			<if test="isDisable != null" >
+				#{isDisable},
+			</if>
+			<if test="isDelete != null" >
+				#{isDelete},
+			</if>
+			<if test="createdBy != null" >
+				#{createdBy},
+			</if>
+			<if test="createdDate != null" >
+				#{createdDate},
+			</if>
+			<if test="lastModifiedBy != null" >
+				#{lastModifiedBy},
+			</if>
+			<if test="lastModifiedDate != null" >
+				#{lastModifiedDate},
+			</if>
+		</trim>
+	</insert>
+
+	<!-- 更新一条记录(为空的字段不操作) -->
+	<update id="updateSelectiveByPrimaryKey" parameterType="com.scs.usermanagement.domainmodel.SysRole">
+		update sys_role
+		<set>
+			<if test="roleCode != null" >
+				role_code=#{roleCode},
+			</if>
+			<if test="roleName != null" >
+				role_name=#{roleName},
+			</if>
+			<if test="roleDescription != null" >
+				role_description=#{roleDescription},
+			</if>
+			<if test="isDisable != null" >
+				is_disable=#{isDisable},
+			</if>
+			<if test="isDelete != null" >
+				is_delete=#{isDelete},
+			</if>
+			<if test="createdBy != null" >
+				created_by=#{createdBy},
+			</if>
+			<if test="createdDate != null" >
+				created_date=#{createdDate},
+			</if>
+			<if test="lastModifiedBy != null" >
+				last_modified_by=#{lastModifiedBy},
+			</if>
+			<if test="lastModifiedDate != null" >
+				last_modified_date=#{lastModifiedDate},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<!-- 完整更新一条记录 -->
+	<update id="updateByPrimaryKey" parameterType="com.scs.usermanagement.domainmodel.SysRole">
+		update sys_role
+		set role_code=#{roleCode},
+			role_name=#{roleName},
+			role_description=#{roleDescription},
+			is_disable=#{isDisable},
+			is_delete=#{isDelete},
+			created_by=#{createdBy},
+			created_date=#{createdDate},
+			last_modified_by=#{lastModifiedBy},
+			last_modified_date=#{lastModifiedDate}
+		where id = #{id}
+	</update>
+
+</mapper>

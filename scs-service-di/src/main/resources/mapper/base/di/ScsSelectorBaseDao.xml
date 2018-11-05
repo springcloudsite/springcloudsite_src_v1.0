@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- ============================================================== -->
+<!-- ============================================================== -->
+<!-- =======通过Fyz工具自动生成，请勿手工修改！======= -->
+<!-- =======本配置文件中定义的节点可在自定义配置文件中直接使用！       ======= -->
+<!-- ============================================================== -->
+<!-- ============================================================== -->
+<mapper namespace="com.scs.di.dao.ScsSelectorDao">
+	<!-- 默认开启二级缓存,使用Least Recently Used（LRU，最近最少使用的）算法来收回 -->
+	<!-- <cache/> -->
+	<!-- 通用查询结果对象-->
+	<resultMap id="BaseResultMap" type="com.scs.di.domainmodel.ScsSelector">
+		 <id column="id" property="id"/> 
+		 <result column="name" property="name"/> 
+		 <result column="urlpath" property="urlpath"/> 
+		 <result column="created_by" property="createdBy"/> 
+		 <result column="created_date" property="createdDate"/> 
+		 <result column="last_modified_by" property="lastModifiedBy"/> 
+		 <result column="last_modified_date" property="lastModifiedDate"/> 
+	</resultMap>
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		 id, name, urlpath, created_by AS createdBy, created_date AS createdDate,
+		 last_modified_by AS lastModifiedBy, last_modified_date AS lastModifiedDate
+	</sql>
+
+	<!-- 按对象查询记录的WHERE部分 -->
+	<sql id="Base_Select_By_Entity_Where">
+		<if test="id != null and id != ''">
+			and id = #{id}
+		</if>
+		<if test="name != null and name != ''">
+			and name = #{name}
+		</if>
+		<if test="urlpath != null and urlpath != ''">
+			and urlpath = #{urlpath}
+		</if>
+		<if test="createdBy != null and createdBy != ''">
+			and created_by = #{createdBy}
+		</if>
+		<if test="createdDate != null and createdDate != ''">
+			and created_date = #{createdDate}
+		</if>
+		<if test="lastModifiedBy != null and lastModifiedBy != ''">
+			and last_modified_by = #{lastModifiedBy}
+		</if>
+		<if test="lastModifiedDate != null and lastModifiedDate != ''">
+			and last_modified_date = #{lastModifiedDate}
+		</if>
+	</sql>
+
+	<!-- 按对象查询记录的SQL部分 -->
+	<sql id="Base_Select_By_Entity">
+		select
+			<include refid="Base_Column_List" />
+		from scs_selector
+		<where>
+			<include refid="Base_Select_By_Entity_Where" />
+		</where>
+	</sql>
+
+	<!-- 按主键查询一条记录 -->
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="map">
+		select
+			<include refid="Base_Column_List" />
+		from scs_selector
+		where id = #{param1}
+	</select>
+
+	<!-- 按主键List查询多条记录 -->
+	<select id="selectBatchByPrimaryKeys" resultMap="BaseResultMap" parameterType="map">
+		select
+			<include refid="Base_Column_List" />
+		from scs_selector
+		where id in
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+
+	<!-- 按对象查询一页记录（多条记录） -->
+	<select id="selectPage" resultMap="BaseResultMap" parameterType="com.scs.di.domainmodel.ScsSelector">
+		<include refid="Base_Select_By_Entity" />
+	</select>
+
+	<!-- 按对象查询一页记录（多条记录） -->
+	<select id="selectAll" resultMap="BaseResultMap" parameterType="com.scs.di.domainmodel.ScsSelector">
+		<include refid="Base_Select_By_Entity" />
+	</select>
+
+	<!-- 按主键删除一条记录 -->
+	<delete id="deleteByPrimaryKey" parameterType="map">
+		delete from scs_selector
+		where id = #{param1}
+	</delete>
+
+	<!-- 按主键List删除多条记录 -->
+	<delete id="deleteBatchByPrimaryKeys" parameterType="map">
+		delete from scs_selector
+		where id in 
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+	<!-- 完整插入一条记录-->
+	<insert id="insert" parameterType="com.scs.di.domainmodel.ScsSelector" useGeneratedKeys="true" keyProperty="id">
+		insert into scs_selector (name, urlpath, created_by, created_date, 
+			last_modified_by, last_modified_date)
+		values(#{name}, #{urlpath}, #{createdBy}, #{createdDate}, 
+			#{lastModifiedBy}, #{lastModifiedDate})
+	</insert>
+
+	<!-- 插入一条记录(为空的字段不操作) -->
+	<insert id="insertSelective" parameterType="com.scs.di.domainmodel.ScsSelector" useGeneratedKeys="true" keyProperty="id">
+		insert into scs_selector
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="name != null" >
+				name,
+			</if>
+			<if test="urlpath != null" >
+				urlpath,
+			</if>
+			<if test="createdBy != null" >
+				created_by,
+			</if>
+			<if test="createdDate != null" >
+				created_date,
+			</if>
+			<if test="lastModifiedBy != null" >
+				last_modified_by,
+			</if>
+			<if test="lastModifiedDate != null" >
+				last_modified_date,
+			</if>
+		</trim>
+		values <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="name != null" >
+				#{name},
+			</if>
+			<if test="urlpath != null" >
+				#{urlpath},
+			</if>
+			<if test="createdBy != null" >
+				#{createdBy},
+			</if>
+			<if test="createdDate != null" >
+				#{createdDate},
+			</if>
+			<if test="lastModifiedBy != null" >
+				#{lastModifiedBy},
+			</if>
+			<if test="lastModifiedDate != null" >
+				#{lastModifiedDate},
+			</if>
+		</trim>
+	</insert>
+
+	<!-- 更新一条记录(为空的字段不操作) -->
+	<update id="updateSelectiveByPrimaryKey" parameterType="com.scs.di.domainmodel.ScsSelector">
+		update scs_selector
+		<set>
+			<if test="name != null" >
+				name=#{name},
+			</if>
+			<if test="urlpath != null" >
+				urlpath=#{urlpath},
+			</if>
+			<if test="createdBy != null" >
+				created_by=#{createdBy},
+			</if>
+			<if test="createdDate != null" >
+				created_date=#{createdDate},
+			</if>
+			<if test="lastModifiedBy != null" >
+				last_modified_by=#{lastModifiedBy},
+			</if>
+			<if test="lastModifiedDate != null" >
+				last_modified_date=#{lastModifiedDate},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<!-- 完整更新一条记录 -->
+	<update id="updateByPrimaryKey" parameterType="com.scs.di.domainmodel.ScsSelector">
+		update scs_selector
+		set name=#{name},
+			urlpath=#{urlpath},
+			created_by=#{createdBy},
+			created_date=#{createdDate},
+			last_modified_by=#{lastModifiedBy},
+			last_modified_date=#{lastModifiedDate}
+		where id = #{id}
+	</update>
+
+</mapper>

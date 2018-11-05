@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- ============================================================== -->
+<!-- ================可直接使用Base配置文件中定义的节点！================ -->
+<!-- ============================================================== -->
+<mapper namespace="com.scs.usermanagement.dao.SysFunctionDao">
+	<!-- 请在下方添加自定义配置 -->
+	<!-- 用户与角色关系列表对象 -->
+	<resultMap id="FunctionRoleResultMap" type="com.scs.usermanagement.vo.FunctionRoleVO">
+		<id column="id" property="id" />
+		<result column="functionId" property="functionId" />
+		<result column="roleId" property="roleId" />
+		<result column="function_type" property="functionType" />
+		<result column="function_code" property="functionCode" />
+		<result column="function_name" property="functionName" />
+		<result column="parent_id" property="parentId" />
+		<result column="is_disable" property="isDisable" />
+	</resultMap>
+	<!-- 菜单显示 -->
+	<resultMap id="MenuResultMap" type="com.scs.usermanagement.vo.MenuFunctionVO">
+		<id column="id" property="id" />
+		<result column="parent_id" property="parentId" />
+		<result column="icon" property="icon" />
+		<result column="function_code" property="functionCode" />
+		<result column="function_name" property="functionName" />
+		<result column="function_description" property="functionDescription" />
+		<result column="url" property="url" />
+		<result column="show_sort" property="showSort" />
+		<result column="function_type" property="functionType" />
+	</resultMap>
+
+	<!-- 根据用户与角色关系条件查询用户对象数据 -->
+	<select id="selectFunctionRoleBySearchFunctionRole" resultMap="FunctionRoleResultMap"
+		parameterType="com.scs.usermanagement.vo.SearchFunctionRole">
+		SELECT
+		b.id, a.id functionId, b.role_id roleId, a.function_type,
+		a.function_code, a.function_name, a.parent_id, a.is_disable
+		FROM
+		sys_function a LEFT
+		JOIN
+		(
+		SELECT * FROM
+		sys_role_function_relationship
+		<where>
+			<if test="roleId != null and roleId != ''">
+				AND role_id = #{roleId}
+			</if>
+		</where>
+		) b ON
+		a.id = b.function_id
+		<where>
+			<if test="functionName != null and functionName != ''">
+				AND a.function_name = #{functionName}
+			</if>
+			<if test="functionNameLike != null and functionNameLike != ''">
+				AND a.function_name LIKE
+				CONCAT('%',#{functionNameLike},'%')
+			</if>
+			<if test="isDisable != null and isDisable != ''">
+				AND a.is_disable = #{isDisable}
+			</if>
+		</where>
+		ORDER BY a.show_sort, a.id
+	</select>
+
+	<!-- 根据用户角色条件查询资源数据 -->
+	<select id="selectFunctionByOrigin" resultMap="MenuResultMap"
+		parameterType="com.scs.usermanagement.vo.FunctionOriginVO">
+		SELECT
+		a.id, a.parent_id, a.icon, a.function_code, a.function_name,
+		a.function_description, a.url, a.show_sort, a.function_type
+		FROM
+		sys_role_function_relationship b
+		LEFT JOIN sys_function a ON a.id =
+		b.function_id
+		LEFT JOIN sys_role c ON b.role_id = c.id
+		<where>
+			<if test="functionType != null and functionType != ''">
+				AND a.function_type = #{functionType}
+			</if>
+			<if test="isDisable != null and isDisable != ''">
+				AND a.is_disable = #{isDisable}
+			</if>
+			<if test="roleId != null and roleId != ''">
+				AND b.role_id = #{roleId}
+			</if>
+			<if test="roleIds != null and roleIds.size > 0">
+				AND b.role_id IN
+				<foreach item="item" index="index" collection="roleIds"
+					open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="roleCodes != null and roleCodes.size > 0">
+				AND c.role_code IN
+				<foreach item="item" index="index" collection="roleCodes"
+					open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+		</where>
+		ORDER BY a.show_sort, a.id
+	</select>
+	<!-- 根据条件查询超级用户资源对象数据 -->
+	<select id="selectFunctionByAdmin" resultMap="MenuResultMap"
+		parameterType="com.scs.usermanagement.vo.FunctionOriginVO">
+		SELECT
+		a.id, a.parent_id, a.icon, a.function_code, a.function_name,
+		a.function_description, a.url, a.show_sort, a.function_type
+		FROM sys_function a
+		<where>
+			<if test="functionType != null and functionType != ''">
+				AND a.function_type = #{functionType}
+			</if>
+			<if test="isDisable != null and isDisable != ''">
+				AND a.is_disable = #{isDisable}
+			</if>
+		</where>
+		ORDER BY a.show_sort, a.id
+	</select>
+</mapper>
