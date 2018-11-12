@@ -1,0 +1,62 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<parent>
+		<groupId>com.scs.scsdi</groupId>
+		<artifactId>scs-framework-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	
+	<groupId>com.scs.scsdi</groupId>
+	<artifactId>scs-eureka</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>scs-zipkinserver</name>
+	<description>服务注册中心</description>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<dependencies>
+ <dependency>
+		<groupId>io.zipkin.java</groupId>
+		<artifactId>zipkin-server</artifactId>
+			<version>2.7.1</version>
+	    </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-sleuth-zipkin-stream</artifactId>
+            </dependency>
+	    <dependency>
+		<groupId>org.springframework.cloud</groupId>
+		<artifactId>spring-cloud-starter-sleuth</artifactId>
+	    </dependency>
+            <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-stream-rabbit</artifactId>
+            </dependency>
+	    <dependency>
+		<groupId>io.zipkin.java</groupId>
+		<artifactId>zipkin-autoconfigure-ui</artifactId>
+		<scope>runtime</scope>
+		<version>2.7.1</version>
+	    </dependency>
+	    <dependency>
+		<groupId>io.zipkin.java</groupId>
+		<artifactId>zipkin-autoconfigure-storage-mysql</artifactId>
+	    </dependency>
+
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
